@@ -1,0 +1,1054 @@
+;; ==================================================
+;;                BARRA PRINCIPAL
+;; ==================================================
+(defwidget bar []
+    (box :class "bar"
+         :orientation "h"
+         (box :halign "start"
+              :valign "center"
+              :spacing 10
+              :hexpand true
+              :space-evenly false
+              (menu)
+              (workspaces)
+         )
+         (box :halign "center"
+              :valign "center"
+              :spacing 10
+              :hexpand true
+              :orientation "h"
+              (time :time get_time)
+         )
+         (box :halign "end"
+              :valign "center"
+              :hexpand true
+              :space-evenly false
+              :spacing 10
+              (box :space-evenly false
+                   :spacing 7
+                   (tray)
+	           (communism)
+                   (volume)
+                   (wifi)
+	           ;(notifications)
+              )
+              (divider)
+              (power)
+         )
+    )
+)
+
+;; ==================================================
+;;               BANDEJA Y SISTEMA
+;; ==================================================
+(defvar trayrev false)
+
+(defwidget tray []
+    (box :orientation "h"
+         :space-evenly false
+         (revealer :reveal {trayrev}
+                   :transition "slideleft"
+                   (box :class "systray-shadow"
+                        (systray :space-evenly true :icon-size 16 :prepend-new true)
+                   )
+         )
+         (eventbox :class "tray-button"
+                   :width 20
+                   :onclick "${trayrev==false?"/usr/bin/eww update trayrev=true":"/usr/bin/eww update trayrev=false"}"
+                   :cursor "pointer"
+                   (label :class "tray-text" :text "${trayrev==false?"‹":"›"}")         
+         )
+    )
+)
+
+;; ==================================================
+;; Volumen hover slider
+;; ==================================================
+
+(defvar volrev false)
+(defvar volico "󰕾")
+
+(defwidget volume []
+    (eventbox
+        :onhover "/usr/bin/eww update volrev=true"
+        :onhoverlost "/usr/bin/eww update volrev=false"
+
+        (box :class "volume-short"
+             :orientation "h"
+             :spacing 8
+             :space-evenly false
+
+             ;; icono
+             (label :text "${volico}")
+
+             ;; porcentaje
+             (label :class "bsht"
+                    :text "${get_vol}%")
+
+             ;; slider hover
+             (revealer
+                 :reveal volrev
+                 :transition "slideright"
+                 :duration "250ms"
+
+                 (scale :class "vol-slider-bar"
+                        :value get_vol
+                        :min 0
+                        :max 101
+                        :round-digits 0
+                        :draw-value false
+                        :onchange "pamixer --set-volume {}"
+                 )
+             )
+        )
+    )
+)
+
+;; RAM (en barra)
+(defwidget ram []
+    (box :class "ram-short"
+        (box :orientation "h"
+             :space-evenly false
+             (label :text " ")
+             (label :class "bsht" 
+                    :text "${round(EWW_RAM.used_mem_perc,0)}%")
+        )
+    )
+)
+
+;; WiFi
+(defvar wifirev false)
+(defvar wifihov false)
+(defvar wifictlrev false)
+
+(defpoll wifistatus :interval "1s" :initial "{\"icon\": \" \", \"ssid\": \"Disconnected\", \"strength\": 0}"
+    "./scripts/current-wifi.sh"
+)
+
+(defwidget wifi []
+    (box :class "wifi"
+        (eventbox :cursor "pointer"
+                  :onhover "./scripts/wifi-delay.sh"
+                  :onhoverlost "bash -c '/usr/bin/eww update wifirev=false && /usr/bin/eww update wifihov=false'"
+                  :onclick "${ctlrev==true?"./scripts/usrctl.sh && ./scripts/wifictl.sh":"./scripts/wifictl.sh"}"
+                  (box :orientation "h"
+                       :space-evenly false
+                       (label :text "${wifistatus.icon}")
+                       (label :class "space-wifi" :text "\\u00A0")
+                       (revealer :reveal {wifirev||wifictlrev?true:false}
+                                 :transition "slideright"
+                                 :duration "350ms"
+                                 (box :class "wifi-type" :space-evenly false
+                                      (label :class "wifi-div" :text "|")
+                                      (label :limit-width 12 :text "${wifistatus.ssid}")
+                                 )
+                       )
+                  )
+        )
+    )
+)
+
+;; ==================================================
+;;                REDES (POPUP)
+;; ==================================================
+(defpoll network :interval "3s" 
+        "./scripts/getnet.sh"
+)
+
+(defwidget wifi_event []
+    (eventbox :class "shadow-container"
+              :onhoverlost "./scripts/wifictl.sh"
+              (box :orientation "v"
+                   :space-evenly false
+              (box :class "wifictl-container"
+                   :space-evenly false
+                   :orientation "v"
+                   (box :class "wifi-header"
+                        :space-evenly false
+                        (label :text "Network Manager")
+                   )
+                   (box :class "wifi-stats"
+                        :space-evenly false
+                        (label :text "STATUS : ")
+                        (label :class "${wifistatus.ssid=="Disconnected"?"nocon":"yescon"}" 
+                               :limit-width 27
+                               :text  "${wifistatus.ssid=="Disconnected"?" Disconnected":" Connected to ${wifistatus.ssid}"}")
+                   )
+                   (scroll :vscroll true
+                           :class "network-container"
+                           (box :orientation "v" :space-evenly false
+                                (for i in {network}
+                                    (wifi-option :ssid "${i.ssid}" :inuse "${i.in_use}" :auto {i.autoconnect}) 
+                                )
+                           )
+                   )
+              )
+              (revealer :reveal {wificonfigrev}
+                        :transition "slidedown"
+                        :duration "350ms"
+                        (eventbox :onhoverlost "/usr/bin/eww update wificonfigrev=false"
+                                  (box :class "wifictl-container"
+                                       :space-evenly false
+                                       :orientation "v"
+                                       (box :class "swifi-header"
+                                            :space-evenly false
+                                            (label :text "${wifissidrev}")
+                                       )
+                                       (box :class "wifi-bcon"
+                                            :orientation "h"
+                                            :visible {wificlass=="1"?true:false}
+                                            (box :class "wifi-buttons"
+                                            (input :password true
+                                                   :space-evenly false
+                                                   :class "iwifi"
+                                                   :height 30
+                                                   :onaccept "/usr/bin/eww update wificonfigrev=false && nmcli device wifi connect \"${wifissidrev}\" password \"{}\""
+                                            ))
+                                       )
+                                       (box :orientation "h"
+                                            :spacing 10
+                                            :visible {wificlass=="2"?true:false}
+                                            :class "wifi-bcon"
+                                            (eventbox :cursor "pointer"
+                                                      :height 30
+                                                      :class "wifi-buttons"
+                                                      :onclick "/usr/bin/eww update wificonfigrev=false && nmcli device wifi connect \"${wifissidrev}\""
+                                                      (label :text "Connect")
+                                            )
+                                            (eventbox :cursor "pointer"
+                                                      :class "wifi-buttons"
+                                                      :onclick "/usr/bin/eww update wificonfigrev=false && nmcli connection delete \"${wifissidrev}\""
+                                                      (label :text "Remove")
+                                            )
+                                       )
+                                       (box :orientation "h"
+                                            :spacing 10
+                                            :visible {wificlass=="3"?true:false}
+                                            :class "wifi-bcon"
+                                            (eventbox :cursor "pointer"
+                                                      :class "wifi-buttons"
+                                                      :onclick "/usr/bin/eww update wificonfigrev=false && nmcli device disconnect wlp0s20f3"
+                                                      :height 30
+                                                      (label :text "Disconnect")
+                                            )
+                                            (eventbox :cursor "pointer"
+                                                      :class "wifi-buttons"
+                                                      :onclick "/usr/bin/eww update wificonfigrev=false && nmcli connection delete \"${wifissidrev}\""
+                                                      (label :text "Remove")
+                                            )
+                                       )
+                                  )
+                        )
+              ))
+
+    )
+)
+
+(defvar wificonfigrev false)
+(defvar wifissidrev "")
+(defvar wificlass "")
+
+(defwidget wifi-option [ssid auto inuse]
+    (eventbox :cursor "pointer"
+              :onclick "/usr/bin/eww update wificonfigrev=false && /usr/bin/eww update wificonfigrev=true && /usr/bin/eww update wificlass=${auto==false?"1":inuse==false?"2":"3"} && /usr/bin/eww update wifissidrev=\"${ssid}\""
+              (box :class "wifi-option-box"
+                   :orientation "v"
+                   (box :class "wifi-ssid"
+                        :space-evenly false
+                        :orientation "h"
+                        (label :class "${auto==false?"wifi-ssid-01":inuse==false?"wifi-ssid-02":"wifi-ssid-03"}"
+                               :limit-width 30 
+                               :text "${ssid}"
+                        )
+                   )
+               )
+    )
+)
+
+(defwindow wifictl
+    :monitor 0
+    :stacking "overlay"
+    :focusable "ondemand"
+    :geometry (geometry :anchor "top right"
+                        :x "5px"
+                        :y "-14px"
+                        :width "425px"
+                        :height "440px"
+    )
+    (expander :expanded true
+              (revealer :transition "slidedown"
+                        :reveal wifictlrev
+                        :duration "350ms"
+                        (wifi_event)
+              )
+    )
+)
+
+
+
+;; ==================================================
+;;                  BOTONES GENERICOS
+;; ==================================================
+(defwidget button-module [icon cmd ?class ?subclass]
+    (box :class "${class}"
+         :orientation "h"
+         (eventbox :onclick "${cmd}"
+                   :cursor "pointer"
+                   :class "${subclass}"
+                   (label :text "${icon}")
+         )
+    )
+)
+
+;; ==================================================
+;;                MENÚ (ROFI)
+;; ==================================================
+(defwidget menu []
+    (button-module :class "menu"
+                   :subclass "menu-eventbox"
+                   :icon " "
+                   :cmd "/home/dafne/.config/rofi/launchers/type-7/launcher.sh"
+    )
+)
+
+(defwidget communism []
+    (button-module :class "communism"
+                   :subclass "communism-eventbox"
+                   :icon "󱢇 "
+		   :cmd "echo hi comader"
+    )
+)
+;; ==================================================
+;;                POWER
+;; ==================================================
+(defwidget power []
+    (box :class "power"
+         :orientation "h"
+         (eventbox :onclick '${wifictlrev == true ? "bash -c \"./scripts/wifictl.sh & sleep 0.233 && ./scripts/usrctl.sh &\"" : "./scripts/usrctl.sh"}'
+                   :cursor "pointer"
+                   :class "power-eventbox"
+                   (label :text " ")
+         )
+    )
+)
+
+;; ==================================================
+;;                WORKSPACES (dinámicos)
+;; ==================================================
+(defwidget workspaces []
+    (literal :content workspaces-output)
+)
+
+;; Valor inicial (será sobrescrito por el script)
+(defvar workspaces-output "(box :class \"ws\" :halign \"end\" :orientation \"h\" :spacing 5 :space-evenly \"false\" (eventbox :onclick \"mmsg -t 1\" :cursor \"pointer\" :class \"visiting\" (label :text \" \")) (eventbox :onclick \"mmsg -t 2\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 3\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 4\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 5\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 6\" :cursor \"pointer\" :class \"free\" (label :text \" \")) )")
+
+;; ==================================================
+;;                DIVISOR
+;; ==================================================
+(defwidget divider []
+    (label :class "div" :text "|")
+)
+
+;; ==================================================
+;;                CALENDARIO
+;; ==================================================
+(defwindow calendar
+    :monitor 0
+    :stacking "overlay"
+    :geometry (geometry :anchor "top center"
+                        :y "-15px"
+                        :width "355px"
+                        :height "41%"
+    )
+    (expander :expanded true
+              (revealer :transition "slidedown"
+                        :reveal calrev
+                        :duration "350ms"
+                        (calendar_event)
+              )
+    )
+)
+
+(defvar calrev false)
+
+(defwidget calendar_event []
+    (eventbox :onhoverlost "./scripts/calendar.sh"
+         (calendar_widget :time get_time
+                          :date get_date
+         )
+    )
+)
+
+(defwidget calendar_widget[time date]
+    (box :class "calendar-container"
+         :orientation "v"
+         :spacing 16
+         :space-evenly false
+         (box :class "time-box"
+              :orientation "v"
+              :halign "center"
+              :space-evenly false
+              (box :class "time-inner"
+                   (label :text "${time}")
+              )
+              (box :class "date-inner"
+                   (label :text "${date}")
+              )
+         )
+         (box :class "calendar-box"
+              :halign "center"    
+              (calendar :class "cal")
+         )
+    )
+)
+
+(defwidget time [time]
+    (eventbox :cursor "pointer"
+              :onclick "./scripts/calendar.sh"
+              :width 60
+              :height 25
+              :class "time-label"
+              (label :text "${time}")
+    )
+)
+
+(defpoll get_date :interval "1s"
+                  "date +'%d.%m.%Y, %A'"
+)
+
+(defpoll get_time :interval "1s"
+                  "date +%H:%M"
+)
+
+(defpoll get_uptime :interval "1s"
+                  "uptime -p"
+)
+
+;; ==================================================
+;;          MENÚ LATERAL DE CONTROL (usrctl)
+;; ==================================================
+(defwindow usrctl 
+    :monitor 0
+    :stacking "overlay"
+    :geometry (geometry :anchor "top right"
+                        :x "5px"
+                        :y "-4px"
+                        :width "425px"
+                        :height "993px"
+    )
+    (box :space-evenly false
+         :halign "end"
+              (revealer :transition "slideleft"
+                        :reveal ctlrev
+                        :duration "350ms"
+                        (usrctl-widget :uptime get_uptime)
+              )
+    )
+)
+
+(defvar ctlrev false)
+
+;; ==================================================
+;;               BOTÓN DE ACCIÓN PERSONALIZADO
+;; ==================================================
+(defwidget action-button [title subtitle cmd]
+    (eventbox :cursor "pointer"
+              :class "action-btn"
+              :width 90
+              :height 90
+              :onclick "${cmd}"
+              (box :class "action-btn-content"
+                   :orientation "v"
+                   :halign "center"
+                   :valign "center"
+                   :spacing 4
+                   (label :class "action-title" :text "${title}")
+                   (label :class "action-subtitle" :text "${subtitle}")
+              )
+    )
+)
+
+(defwidget usrctl-widget [uptime]
+    (box :space-evenly false
+         :valign "start"
+    (eventbox :class "shadow-container"
+         :onhoverlost "./scripts/usrctl.sh"
+         (box :orientation "v"
+              :space-evenly false
+         (box :class "main-container"
+              :orientation "v"
+              :halign "center"
+              :space-evenly false
+              (box :class "profile-container"
+                   :space-evenly false
+                   (box :class "profile"
+                        :space-evenly false
+                        :valign "start"
+                        :halign "start"
+                        (box :class "pfp")
+                        (box :class "pfp-text"
+                             :orientation "v"
+                             :space-evenly false
+                             (box :class "username"
+                                  :space-evenly false
+                                  (label :text "Dafne")
+                             )
+                             (box :class "uptime"
+                                  :space-evenly false
+                                  (label :limit-width 25 :text "${uptime}")
+                             )
+                             (box :class "ctlpanel"
+                                  (eventbox :cursor "pointer"
+                                            :class "shutdown"
+                                            :onclick "doas /sbin/openrc-shutdown -p now"
+                                            :tooltip " Shutdown "
+                                            (label :text "⏻")
+                                  )
+                                  (eventbox :cursor "pointer"
+                                            :class "logout"
+                                            :onclick "pkill -u dafne"
+                                            :tooltip " Logout "
+                                            (label :text "")
+                                  )
+                                  (eventbox :cursor "pointer"
+                                            :class "lockscr"
+                                            :onclick "./scripts/lock.sh"
+                                            :tooltip " Lock "
+                                            (label :text "\\uf023")
+                                  )
+                                  (eventbox :cursor "pointer"
+                                            :class "reboot"
+                                            :onclick "doas /sbin/openrc-shutdown -r now"
+                                            :tooltip " Reboot "
+                                            (label :text "\\uf021")
+                                  )
+                                  (eventbox :cursor "pointer"
+                                            :class "suspend"
+                                            :onclick "systemctl suspend"
+                                            :tooltip " Sleep "
+                                            (label :text "󰒲")
+                                  )
+                                  (eventbox :cursor "pointer"
+                                            :class "hibernate"
+                                            :onclick "doas pm-hibernate"
+                                            :tooltip " Hibernate "
+                                            (label :text "\\uf2dc")
+                                  )
+                             )
+                        )
+                   )
+              )
+              (box :class "monitor-container"
+                   :orientation "v"
+                   :space-evenly false
+                   (box :class "sysctl"
+                        :orientation "v"
+                        (box :class "sliderctl"
+                             :orientation "v"
+                             :spacing 6
+                             (box :class "volume-slider"
+                                  :space-evenly false
+                                  :halign "center"
+                                  (label :text "${volico}")
+                                  (scale :class "vol"
+                                         :value get_vol
+                                         :max 101 
+                                         :min 0
+                                         :round-digits 0
+                                         :onchange "pamixer --set-volume {}"
+                                  )
+                             )
+                        )
+                        
+                        (box :class "sys"
+                            (box :class "cpu-box" 
+                                 :orientation "v" 
+                                 :space-evenly false
+                                 (eventbox :class "cpu-hover"
+                                           :tooltip " ${round(EWW_CPU.avg,1)}% used "
+                                           (circular-progress :class "cpu"
+                                                    :value {round(EWW_CPU.avg,10)}
+                                                    :thickness 5
+                                                    (box :class "cpuico"
+                                                        (label :text " ")
+                                                    )
+                                           )
+                                 )
+                                 (box :class "cpu-text"
+                                      :space-evenly false
+                                      :halign "center"
+                                      (box :class "cpu01"
+                                        "CPU "
+                                      )
+                                      (box :class "cpu02"
+                                        "${round(EWW_CPU.avg,0)}%"
+                                      )
+                                 )
+                            )
+                            (box :class "ram-box" 
+                                 :orientation "v" 
+                                 :space-evenly false
+                                 (eventbox :class "ram-hover"
+                                           :tooltip " ${round(EWW_RAM.used_mem/1073741824,1)}GB used "
+                                           (circular-progress :class "ram"
+                                                    :value {round(EWW_RAM.used_mem_perc,10)}
+                                                    :thickness 5
+                                                    (box :class "ramico"
+                                                         (label :text " ")
+                                                    )
+                                           )
+                                 )
+                                 (box :class "ram-text"
+                                      :space-evenly false
+                                      :halign "center"
+                                      (box :class "ram01"
+                                        "RAM "
+                                      )
+                                      (box :class "ram02"
+                                        "${round(EWW_RAM.used_mem_perc,0)}%"
+                                      )
+                                 )
+                            )
+                            (box :class "disk-box"
+                                 :orientation "v" 
+                                 :space-evenly false 
+                                 (eventbox :class "disk-hover"
+                                           :tooltip " ${round(EWW_DISK["/"].used/1073741824,1)}GB used "
+                                           (circular-progress :class "disk"
+                                                    :value {round(EWW_DISK["/"].used_perc,10)}
+                                                    :thickness 5
+                                                    (box :class "diskico"
+                                                         (label :text " ")
+                                                    )
+                                           )
+                                 )
+                                 (box :class "disk-text"
+                                      :space-evenly false
+                                      :halign "center"
+                                      (box :class "disk01"
+                                        "DISK "
+                                      )
+                                      (box :class "disk02"
+                                        "${round(EWW_DISK["/"].used_perc,0)}%"
+                                      )
+                                 )
+                            )
+                        )
+                   )
+              )
+              ;; ==========================================
+              ;; NUEVOS 6 BOTONES (3 arriba, 3 abajo)
+              ;; ==========================================
+              (box :class "actions-container"
+		   :spacing 8
+                   :orientation "v"
+                   :space-evenly false
+                   (box :class "actions-header"
+                        :halign "center"
+                        (label :text "MangoWM Layer" :class "actions-title-text")
+                   )
+                   ;; Primera fila (3 botones)
+(box :orientation "h"
+     :halign "center"
+     :spacing 8
+     :margin-bottom 20
+     (action-button :title "󰕫" :subtitle "Scroll" :cmd "mmsg -d setlayout,scroller")
+     (action-button :title "󰕴" :subtitle "Dwindle" :cmd "mmsg -d setlayout,dwindle")
+     (action-button :title "󰕬" :subtitle "Center Tile" :cmd "mmsg -d setlayout,center_tile")
+)
+;; Segunda fila (3 botones)
+(box :orientation "h"
+     :halign "center"
+     :spacing 8
+     :margin-top 20
+     (action-button :title "󰕯" :subtitle "V Scroller" :cmd "mmsg -d setlayout,vertical_scroller")
+     (action-button :title "󰙀" :subtitle "Tile" :cmd "mmsg -d setlayout,tile")
+     (action-button :title "󰕰" :subtitle "Grid" :cmd "mmsg -d setlayout,grid")
+)
+              )
+	(music-player)
+         )
+         )
+    ))
+)
+
+;; ==================================================
+;;              REPRODUCTOR DE MÚSICA
+;; ==================================================
+(deflisten music :initial "{}" "./scripts/music.sh")
+(deflisten pmusic :initial "{}" "./scripts/pmusic.sh")
+
+(defpoll cmusic :interval "1s"
+    "playerctl -l"
+)
+
+(defvar get_vol "")
+(deflisten get_volume
+    "./scripts/getvol.sh"
+)
+
+(defwidget music-player []
+    (revealer :transition "slidedown"
+                   :reveal {"${cmusic}" == "" || "${music.title}" == "" ? false : true}
+         (box :class "music-container"
+              :space-evenly false
+              :orientation "v"
+              (box :class "music-title"
+                   :orientation "h"
+                   :space-evenly false
+                   (box :class "music-thumbnail" 
+                        :style "background-image: url('${music.thumbnail}');"
+                   )
+                   (box :class "music-desc"
+                        :orientation "v"
+                        :space-evenly false
+                        (label :class "main-title" :halign "start" :limit-width 21 :text "${music.title}")
+                        (label :class "artist" :halign  "start" :limit-width 31 :text "By ${music.artist}")
+                   )
+              )
+              (scale :class "music-slider"
+                     :min 0
+                     :max {music.length}
+                     :value {pmusic.position}
+                     :onchange "playerctl position {}"
+              )
+              (box :class "music-timer"
+                   (label :halign "start" :text "${pmusic.positionStr}")
+                   (label :halign "end" :text "${music.lengthStr}")
+              )
+              (box :class "music-action"
+                   :orientation "h"
+                   :space-evenly false
+                   :halign "center"
+                   :spacing 45
+                   (eventbox :class "mico" :cursor "pointer" :onclick "playerctl previous" "󰒮")
+                   (eventbox :class "mico" :cursor "pointer" :onclick "playerctl play-pause" {music.status == "Playing" ? "󰓛" : "󰐊"})
+                   (eventbox :class "mico" :cursor "pointer" :onclick "playerctl next" "󰒭")
+              )
+         ))
+
+)
+
+;; ==================================================
+;;                 PANEL DE CPU (opcional)
+;; ==================================================
+(defwidget cpu-panel []
+    (box :class "cpu-container"
+         :orientation "v"
+         :space-evenly false
+         (box :orientation "h"
+              :class "cpu-header"
+              :space-evenly false
+              (label :text "Core Temperature" :style "color:#cdd6f4;font-size:20px;")
+         )
+         (box :class "graph-container"
+              :orientation "v"
+              :space-evenly false
+              (overlay
+              (graph :thickness 2
+                     :dynamic true
+                     :height "100"
+                     :width "350"
+                     :class "graph-display"
+                     :time-range "300s"
+                     :min 0
+                     :max 101
+                     :value {EWW_TEMPS.CORETEMP_PACKAGE_ID_0}
+              )
+              (box :class "main-temp"
+                   :halign "start"
+                   :valign "end"
+                   (label :class "main-temp-text" :text "${EWW_TEMPS.CORETEMP_PACKAGE_ID_0} °C")
+              )
+              )
+         )
+         (box :class "minicore-container"
+              :orientation "v"
+              :space-evenly false
+              (box :class "minicores"
+                   (label :class "C0" :text "Core 0: ${EWW_TEMPS.CORETEMP_CORE_0} °C")
+                   (label :class "C1" :text "Core 1: ${EWW_TEMPS.CORETEMP_CORE_1} °C")
+              )
+              (box :class "minicores"
+                   (label :class "C2" :text "Core 2: ${EWW_TEMPS.CORETEMP_CORE_2} °C")
+                   (label :class "C3" :text "Core 3: ${EWW_TEMPS.CORETEMP_CORE_3} °C")
+              )
+         )
+    )
+)
+
+;; ==================================================
+;;                VENTANA PRINCIPAL
+;; ==================================================
+(defwindow bar_widget
+    :monitor 0
+    :stacking "fg"
+    :geometry (geometry :anchor "top center"
+                        :width "99.5%"
+                        :height "3.425%"
+    )
+    :exclusive true
+    (bar)
+)
+
+
+;; ==================================================
+;;                CAVA
+;; ==================================================
+
+(defwidget visualizer []
+  (box :class "cava-container" :orientation "vertical"
+    (label :class "cava-bars" :text cava_output)
+        (box :class "controls" :orientation "h"
+        (button :class "previous-button" :onclick "playerctl previous" "󰒮")
+        (eventbox :onclick "playerctl play-pause" :class "pause-play-button"
+          (label :class "song-title" :text song_title :limit-width 25))
+        (button :class "next-button" :onclick "playerctl next" "󰒭")
+      )
+  )
+)
+(defwindow visualizer_window
+  :monitor 0
+  :geometry (geometry :x "35%"
+                      :y "84%"
+                      :width "400px"  ;; Adjust based on how many bars you set in CAVA
+                      :height "20px"
+                      )
+  :stacking "bg"
+  :windowtype "desktop"
+  :wm-ignore false
+  (visualizer))
+
+;; ==================================================
+;;                VARIABLES CAVA 
+;; ==================================================
+
+(deflisten cava_output "sh ~/.config/eww/scripts/cava.sh")
+
+(deflisten song_title    :initial "No Music Playing"
+"playerctl metadata --format '{{title}}' --follow || echo 'No Music Playing'")
+
+(deflisten player_status :initial "Stopped"
+"playerctl metadata --format '{{status}}' --follow || echo 'Stopped'")
+
+;; ==================================================
+;;                CLOCK 
+;; ==================================================
+
+(defwidget clock_widget []
+  (box :orientation "v" :space-evenly false :class "clock-box"
+    (label :class "main-day" :text day)
+    (label :class "sub-date" :text date)
+    (label :class "sub-time" :text { "- " + time + " -" })
+  )
+)
+
+(defwindow clock
+  :monitor 0
+  :geometry (geometry :x "0%" :y "40%" :width "1400px" :height "900px")
+  :stacking "bg"
+  :windowtype "desktop"
+  :wm-ignore false
+  (clock_widget))
+
+;; ==================================================
+;;                VARIABLES CLOCK 
+;; ==================================================
+
+(defpoll time :interval "1s" "date '+%I:%M %p'")
+(defpoll day  :interval "1h" "date '+%A' | tr '[:lower:]' '[:upper:]'")
+(defpoll date :interval "1h" "date '+%d %B, %Y.' | tr '[:lower:]' '[:upper:]'")
+
+
+
+;; ==================================================
+;;                NOTIFICATIONS 
+;; ==================================================
+
+(defvar end-binary "~/.config/eww/bin/end-rs") 
+(defvar end-notifications '')
+(defvar end-histories '')
+(defvar end-replies '')
+(defvar end-reply-text '')
+
+(defwindow notification-frame
+  :monitor 0
+  :geometry (geometry 
+    :x "0px"
+    :y "0px"
+    :width "480px"
+    :height "0px" :anchor "top right")
+  :stacking "overlay"
+  (literal :content end-notifications))
+
+(defwindow history-frame
+  :monitor 0
+  :class "end-history-frame"
+  :geometry (geometry 
+   :x "0.5%"
+   :y "0.5%"
+   :width "30px"
+   :height "60%"
+   :anchor "top right")
+  :stacking "overlay"
+	(box
+  (revealer :transition "slideright" :reveal notifhisrev (box :class "notif-container" (scroll :hscroll false :vscroll true (literal :content end-histories))))))
+
+(defwindow reply-frame
+  :monitor 0
+  :geometry (geometry 
+    :x "0px"
+    :y "0px"
+    :width "480px"
+    :height "0px"
+    :anchor "center")
+  :stacking "overlay"
+  :focusable true
+  (literal :content end-replies))
+
+(defvar notifhisrev false)
+
+(defwidget end-notification[notification]
+  (eventbox
+    :onclick "${end-binary} close ${notification.id}"
+    :valign "start"
+    :height 100
+    (
+      box
+      :class `end-default-notification-box-${notification.urgency} container`
+      :orientation "vertical"
+      :space-evenly false
+      (box
+        :class "end-default-notification-title-bar"
+        :orientation "horizontal"
+        :space-evenly false
+        (image
+          :path {notification.app_icon}; end sets this property if the notification contains an image
+          :class "end-default-notification-appicon"
+	  :visible {notification.app_icon != "" ? true : false}
+          :image-width 25
+          :image-height 25)
+        (label
+          :class "end-default-notification-appname"
+          :valign "start"
+          :yalign 0
+          :xalign 0
+          :text {notification.application}))
+      (box
+        :class "end-default-notification-body-box"
+        :orientation "horizontal"
+        :space-evenly false
+        (image
+          :path {notification.icon}; end sets this property if the notification contains an image
+          :image-width 100
+          :image-height 100
+        )
+        (box
+          :class "content-box"
+          :valign "start"
+          :orientation "vertical"
+          :space-evenly "false"
+          (label 
+            :class "notification-text notification-title"
+            :valign "start"
+            :yalign 0
+            :xalign 0
+            :markup {notification.summary})
+          (label
+            :class "notification-text notification-content"
+            :valign "start"
+            :yalign 0
+            :xalign 0
+            :vexpand true
+            :wrap true
+            :markup {notification.body})
+        )
+        (box
+          :class "end-notification-buttons"
+          :orientation "horizontal"
+          :space-evenly false
+          :valign "end"
+          :vexpand false
+          (for action in {notification.actions}
+            (button
+              :class "end-notification-button"
+              :onclick "${end-binary} action ${notification.id} ${action.id}"
+              :vexpand false
+              {action.text}))
+          )))))
+
+(defwidget end-history[history]
+  (eventbox
+    ; :onhoverlost "eww update notifhisrev=false"
+    :height 50
+    (box
+      :class "end-history-box"
+      :orientation "vertical"
+      :space-evenly false
+      (box
+        :class "end-history-title-bar"
+        :orientation "horizontal"
+        :space-evenly false
+        (image
+          :path {history.app_icon}; end sets this property if the notification contains an image
+          :class "end-default-notification-appicon"
+	  :visible {history.app_icon != "" ? true : false}
+          :image-width 15
+          :image-height 15)
+        (label
+          :class "end-default-notification-appname"
+          :valign "start"
+          :yalign 0
+          :xalign 0
+          :text {history.app_name}))
+      (box
+        :class "end-history-body-box"
+        :orientation "horizontal"
+        :space-evenly false
+        :geometry (geometry :width "100%" :height "50px")
+        (image
+          :path {history.icon}; end sets this property if the notification contains an image
+          :image-width 50
+          :image-height 50
+        )
+        (box
+          :class "content-box"
+          :orientation "vertical"
+          :space-evenly false
+          (label 
+            :class "notification-text notification-title"
+            :yalign 1
+            :xalign 0
+            :markup {history.summary})
+          (label
+            :class "notification-text notification-content"
+            :yalign 1
+            :xalign 0
+            :wrap true
+            :markup {history.body}))))))
+
+(defwidget end-reply[id]
+  (box
+    :class "end-default-notification-box"
+    :orientation "vertical"
+    :space-evenly false
+    (input
+      :class "end-notification-reply"
+      :value end-reply-text
+      :onchange "${EWW_CMD} update end-reply-text='{}'")
+    (box
+      :class "end-notification-buttons"
+      :orientation "horizontal"
+      :space-evenly false
+      (button
+        :class "end-notification-button"
+        :onclick `${end-binary} reply send ${id} "${end-reply-text}"`
+        :vexpand false
+        "Reply")
+      (button
+        :class "end-notification-button"
+        :onclick "${end-binary} reply close ${id}"
+        :vexpand false
+        "Cancel"))
+  )
+)

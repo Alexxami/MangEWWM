@@ -1,0 +1,814 @@
+/* ==================================================
+   NORD DARK THEME
+   Converted from original light Nord to dark variant
+   ================================================== */
+
+* {
+  all: unset;
+  font-family: "Monocraft Nerd Font";
+}
+
+.bar {
+  border-radius: 10px;
+  background-color: #2e3440;          /* dark bg */
+  padding: 2px;
+  margin: 3px;
+  margin-top: 5px;
+  padding-bottom: 0px;
+}
+
+.menu {
+  margin-left: 12px;
+}
+
+.menu-eventbox {
+  color: #81a1c1;
+  transition: color 0.3s;
+  font-size: 14px;
+}
+.menu-eventbox:hover {
+  color: #d8dee9;                     /* light fg */
+}
+
+.communism {
+  margin-left: 12px;
+}
+
+.communism-eventbox {
+  color: #bf616a;
+  transition: color 0.3s;
+  font-size: 14px;
+}
+
+.power {
+  margin-right: 10px;
+}
+
+.power-eventbox {
+  color: #bf616a;
+  font-weight: bold;
+  font-size: 14px;
+  font-family: "JetBrainsMono Nerd Font";
+  transition: color 0.3s;
+}
+.power-eventbox:hover {
+  color: #d08770;
+}
+
+.ws {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 16px;
+  color: #d8dee9;                     /* light fg */
+}
+
+.div {
+  font-size: 15px;
+  color: #e5e9f0;                     /* lighter fg */
+  margin-bottom: 2px;
+}
+
+.free {
+  opacity: 0.6;
+  color: #d8dee9;
+  transition: opacity 0.3s;
+}
+.free:hover {
+  opacity: 1;
+}
+
+.time-label {
+  background-color: #434c5e;          /* dark element */
+  color: #e5e9f0;
+  border-radius: 20px;
+  transition: color 0.3s, background-color 0.3s;
+}
+.time-label:hover {
+  color: #2e3440;
+  background-color: #81a1c1;
+}
+
+.volume-short {
+  background-color: #434c5e;
+  padding: 0px 0px;
+  border-radius: 20px;
+  font-size: 11px;
+}
+
+.ram-short {
+  color: #81a1c1;
+}
+
+.keyboard {
+  color: #d08770;
+}
+
+.kb-div,
+.wifi-div {
+  margin: 0px 3px;
+  padding: 6px;
+}
+
+.kb-type,
+.wifi-type {
+  color: #e5e9f0;
+}
+
+.tray-button {
+  font-size: 20px;
+  font-family: "JetBrainsMono Nerd Font";
+  color: #d8dee9;
+  border-radius: 10px;
+  transition: background-color 0.6s;
+}
+.tray-button:hover {
+  background-color: #434c5e;
+}
+
+.systray-shadow {
+  background-color: #434c5e;
+  margin-right: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: 0px 8px;
+  border-radius: 20px;
+}
+
+image {
+  margin: 0px 3px;
+}
+
+menu {
+  border-radius: 15px;
+  padding: 10px;
+  background-color: #3b4252;          /* menu bg */
+  color: #d8dee9;
+}
+menu menuitem {
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+menu menuitem:hover {
+  background-color: #81a1c1;
+  color: #2e3440;
+}
+
+.tray-text {
+  margin-bottom: 4px;
+}
+
+.wifi {
+  font-family: "JetBrainsMono Nerd Font";
+  background-color: #434c5e;
+  padding-left: 17px;
+  padding-right: 13px;
+  color: #d08770;
+  border-radius: 20px;
+  font-size: 11px;
+  margin: 3px 0px;
+}
+
+.space-wifi {
+  font-size: 4px;
+}
+
+.wifictl-container,
+.menuctl-container {
+  margin: 5.5px;
+  border-radius: 20px;
+  min-width: 385px;
+  background-color: #434c5e;
+  padding: 5px;
+}
+
+.wifi-header,
+.cpu-header,
+.menu-header {
+  font-size: 25px;
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-bottom: 7px;
+  color: #81a1c1;
+}
+
+.wifi-stats,
+.menu-subheader {
+  color: #e5e9f0;
+  margin-left: 15px;
+}
+
+.nocon {
+  color: #bf616a;
+}
+
+.yescon {
+  color: #a3be8c;
+}
+
+.network-container,
+.app-container {
+  min-height: 15rem;
+  margin: 7px;
+  margin-top: 17px;
+  border-radius: 15px;
+  background-color: #2e3440;          /* deep bg for containers */
+}
+
+.app-container {
+  min-height: 25rem;
+}
+
+.wifi-option-box,
+.app-option-box {
+  font-size: 16px;
+  margin: 5px 5px;
+  border-radius: 15px;
+  padding: 10px;
+  background-color: #3b4252;
+}
+
+.wifi-ssid {
+  margin: 2px 15px;
+}
+
+.app-display {
+  margin: 2px 2px;
+}
+
+.app-name {
+  margin-left: 15px;
+}
+
+.wifi-ssid-01 {
+  color: #d8dee9;
+}
+
+.wifi-ssid-02 {
+  color: #81a1c1;
+}
+
+.wifi-ssid-03 {
+  color: #a3be8c;
+}
+
+.wifi-buttons {
+  color: #d8dee9;
+  border-radius: 10px;
+  background-color: #434c5e;
+}
+
+.wifi-bcon {
+  margin: 10px;
+}
+
+.iwifi {
+  margin-top: 2px;
+  margin-left: 10px;
+}
+
+.swifi-header {
+  font-size: 15px;
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-bottom: 7px;
+  color: #d8dee9;
+}
+
+.calendar-container {
+  margin: 5.5px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  background-color: #434c5e;
+  padding: 5px;
+}
+
+.time-box {
+  border-radius: 15px;
+  margin-top: 8px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 20px;
+  background-color: #2e3440;
+}
+
+.time-inner {
+  color: #81a1c1;
+  font-size: 50px;
+  margin-left: 4px;
+  margin-top: 10px;
+  font-family: "BigBlue Terminal", monospace;
+}
+
+.date-inner {
+  color: #e5e9f0;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.calendar-box {
+  border-radius: 15px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 9px;
+  background-color: #2e3440;
+}
+
+.cal {
+  padding: 5px;
+  color: #d8dee9;
+}
+.cal.header {
+  color: #ebcb8b;
+}
+.cal.button {
+  color: #ebcb8b;
+}
+.cal.button:hover {
+  color: #bf616a;
+}
+.cal:indeterminate {
+  color: #8f9db0;
+}
+.cal.highlight {
+  color: #d08770;
+}
+
+.main-container,
+.music-container,
+.cpu-container {
+  margin: 5.5px;
+  border-radius: 20px;
+  min-width: 385px;
+  background-color: #434c5e;
+  padding: 5px;
+}
+
+.profile,
+.graph-container {
+  min-width: 370px;
+  margin: 0px 7px;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #2e3440;
+}
+
+.graph-container {
+  color: #bf616a;
+}
+
+.graph-display {
+  min-width: 350px;
+}
+
+.main-temp {
+  border-radius: 10px;
+  background-color: #3b4252;
+  margin-left: 3px;
+  padding: 5px 10px;
+}
+
+.pfp {
+  background-image: url('/home/dafne/.face.png');
+  background-size: cover;
+  background-position: 50% 35%;
+  background-repeat: no-repeat;
+  min-height: 90px;
+  min-width: 90px;
+  border-radius: 100%;
+  margin-right: 20px;
+}
+
+.username {
+  font-size: 30px;
+  color: #81a1c1;
+}
+
+.uptime {
+  color: #e5e9f0;
+}
+
+.minicore-container {
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+
+.minicores {
+  padding: 7px;
+}
+
+.C0,
+.C1,
+.C2,
+.C3 {
+  margin: 0px 7px;
+  padding: 10px;
+  border-radius: 15px;
+  background-color: #2e3440;
+  color: #88c0d0;
+}
+
+.ctlpanel {
+  min-width: 230px;
+  margin-top: 10px;
+  border-radius: 20px;
+  padding: 5px;
+  background-color: #3b4252;
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+.shutdown {
+  color: #bf616a;
+  transition: color 0.3s;
+}
+.shutdown:hover {
+  color: #d08770;
+}
+
+.logout {
+  color: #d08770;
+  transition: color 0.3s;
+}
+.logout:hover {
+  color: #ebcb8b;
+}
+
+.lockscr {
+  color: #81a1c1;
+  transition: color 0.3s;
+}
+.lockscr:hover {
+  color: #88c0d0;
+}
+
+.reboot {
+  color: #b48ead;
+  transition: color 0.3s;
+}
+.reboot:hover {
+  color: #d08770;
+}
+
+.suspend {
+  color: #88c0d0;
+  transition: color 0.3s;
+}
+.suspend:hover {
+  color: #81a1c1;
+}
+
+.hibernate {
+  color: #5e81ac;
+  transition: color 0.3s;
+}
+.hibernate:hover {
+  color: #81a1c1;
+}
+
+tooltip {
+  padding: 10px;
+  border-radius: 0px;
+  background-color: #3b4252;
+  color: #d8dee9;
+}
+
+.sysctl {
+  margin: 0px 7px;
+  margin-top: 5px;
+  padding: 6px;
+  background-color: #2e3440;
+  min-width: 370px;
+  border-radius: 15px;
+}
+
+.divider-h {
+  min-height: 3px;
+  margin: 15px 5px;
+  background-color: #434c5e;
+}
+
+.sys {
+  margin: 0px 3px;
+}
+
+.cpu-box,
+.ram-box,
+.disk-box {
+  margin: 0px 3px;
+  border-radius: 15px;
+  background-color: #2e3440;
+}
+
+.cpu,
+.ram,
+.disk {
+  border-radius: 100px;
+  margin-top: 6px;
+}
+.cpu,
+.cpu01 {
+  color: #bf616a;
+}
+.ram,
+.ram01 {
+  color: #81a1c1;
+}
+.disk,
+.disk01 {
+  color: #a3be8c;
+}
+.cpu02,
+.ram02,
+.disk02 {
+  color: #d8dee9;
+}
+
+.ramico,
+.diskico,
+.cpuico {
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.cpuico {
+  margin-left: 15px;
+}
+.ramico,
+.diskico {
+  margin-left: 20px;
+}
+
+.cpu,
+.ram,
+.disk {
+  background-color: #434c5e;
+}
+
+.sliderctl {
+  border-radius: 15px;
+  background-color: #2e3440;
+  padding: 4px 0;
+}
+
+.volume-slider {
+  margin-top: 2px;
+  margin-left: 6px;
+  margin-bottom: 2px;
+}
+
+.vol trough {
+  all: unset;
+  background-color: #434c5e;
+  border-radius: 50px;
+  min-height: 8px;
+  min-width: 200px;
+  margin: 0 8px;
+}
+.vol trough highlight {
+  all: unset;
+  background-color: #81a1c1;
+  border-radius: 10px;
+}
+
+.volume-slider,
+.volume-short {
+  color: #81a1c1;
+}
+
+.clear-container {
+  margin: 6px 10px;
+}
+
+.nheader {
+  font-size: 20px;
+  color: #d8dee9;
+}
+
+.clear {
+  color: #bf616a;
+  font-size: 30px;
+  transition: color 0.3s;
+}
+.clear:hover {
+  color: #ebcb8b;
+}
+
+.music-title {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.music-thumbnail {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 5rem;
+  min-width: 5rem;
+  border-radius: 1rem;
+}
+
+.app-ico {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+}
+
+.main-title {
+  margin-top: 10px;
+  margin-bottom: 8px;
+  margin-left: 12px;
+  font-size: 18px;
+  color: #81a1c1;
+}
+
+.artist {
+  color: #e5e9f0;
+  font-size: 12px;
+  margin-left: 12px;
+}
+
+.music-slider {
+  margin-top: 6px;
+}
+.music-slider trough {
+  all: unset;
+  background-color: #434c5e;
+  border-radius: 50px;
+  min-height: 4px;
+  min-width: 240px;
+  margin: 0 15px;
+}
+.music-slider trough highlight {
+  all: unset;
+  background-color: #81a1c1;
+  border-radius: 10px;
+}
+
+.music-timer {
+  color: #e5e9f0;
+  margin: 2px 15px;
+}
+
+.mico {
+  font-size: 24px;
+  margin-left: 8px;
+  transition: color 0.3s;
+  color: #d8dee9;
+}
+
+.vol-mini trough {
+  all: unset;
+  margin-left: 5px;
+  background-color: #434c5e;
+  border-radius: 50px;
+  min-height: 5px;
+  min-width: 80px;
+}
+.vol-mini trough highlight {
+  all: unset;
+  background-color: #81a1c1;
+  border-radius: 10px;
+}
+
+.music-container {
+  background-color: #2e3440;
+  margin: 5px;
+}
+
+/* ==================================================
+   VOLUMEN HOVER (dark adjusted)
+================================================== */
+
+.volume-short {
+  background-color: #434c5e;
+  border-radius: 20px;
+  font-size: 11px;
+  margin: 3px 0px;
+  padding-left: 16px;
+  padding-right: 14px;
+  color: #81a1c1;
+}
+
+/* slider */
+
+.vol-slider-bar {
+  min-width: 72px;
+  margin-left: 2px;
+}
+
+/* barra */
+
+.vol-slider-bar trough {
+  all: unset;
+  background-color: #434c5e;
+  border-radius: 999px;
+  min-height: 5px;
+  min-width: 72px;
+}
+
+/* progreso */
+
+.vol-slider-bar trough highlight {
+  all: unset;
+  background-color: #81a1c1;
+  border-radius: 999px;
+}
+
+
+window, .cava-container, .controls, button {
+  background-color: transparent;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+
+.cava-bars {
+  /* JetBrains Mono or Fira Code are best for this */
+  font-family: "JetBrainsMono Nerd Font", "monospace";
+  font-size: 30px;
+  letter-spacing: 2px;
+  color: #d8dee9;
+}
+
+
+.song-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.controls button {
+  font-size: 1.5em;
+}
+
+
+/* ClockRainMeter */
+window, .clock-box {
+  background-color: transparent;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+
+.main-day {
+  font-family: "Anurati";
+  font-size: 7rem;
+  padding-left: 25px;
+  letter-spacing: 20px;
+  color: #d8dee9;
+}
+
+.sub-date {
+  font-family: "sans-serif";
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-top: -10px;
+  color: #d8dee9;
+}
+
+.sub-time {
+  font-family: "sans-serif";
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin-top: 15px;
+  color: #d8dee9;
+}
+.actions-container {
+    margin: 5px 7px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #2e3440;
+}
+
+.actions-header {
+    margin-bottom: 10px;
+}
+
+.actions-title-text {
+    font-size: 16px;
+    color: #81a1c1;
+}
+
+.action-btn {
+    background-color: #3b4252;
+    border-radius: 15px;
+    margin: 5px 7px;
+}
+.action-btn:hover {
+    background-color: #434c5e;
+}
+
+.action-title {
+    font-size: 24px;
+    color: #d8dee9;
+}
+
+.action-subtitle {
+    font-size: 11px;
+    color: #d8dee9;
+}
