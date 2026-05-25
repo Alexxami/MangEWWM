@@ -1,0 +1,4 @@
+#!/bin/sh
+export XDG_CURRENT_DESKTOP=mango
+/lib/xdg-desktop-portal &
+exec-once = export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"

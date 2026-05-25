@@ -1,0 +1,186 @@
+/**
+ * @name midnight (nord light)
+ * @description a dark, customizable discord theme. based on nord light theme (https://www.nordtheme.com/)
+ * @author refact0r
+ * @version 2.1.1
+ * @invite nz87hXyvcy
+ * @website https://github.com/refact0r/midnight-discord
+ * @source https://github.com/refact0r/midnight-discord/blob/master/themes/flavors/midnight-gruvbox-light.theme.css
+ * @authorId 508863359777505290
+ * @authorLink https://www.refact0r.dev
+ */
+
+/* import theme modules */
+@import url('https://refact0r.github.io/midnight-discord/build/midnight.css');
+
+body {
+    /* font, change to '' for default discord font */
+    --font: ''; /* change to '' for default discord font */
+    --code-font: ''; /* change to '' for default discord font */
+    font-weight: 400 /* normal text font weight. DOES NOT AFFECT BOLD TEXT */;
+
+    /* sizes */
+    --gap: 12px; /* spacing between panels */
+    --divider-thickness: 4px; /* thickness of unread messages divider and highlighted message borders */
+    --border-thickness: 1px; /* thickness of borders around main panels. DOES NOT AFFECT OTHER BORDERS */
+
+    /* animation/transition options */
+    --animations: on; /* off: disable animations/transitions, on: enable animations/transitions */
+    --list-item-transition: 0.2s ease; /* transition for list items */
+    --dms-icon-svg-transition: 0.4s ease; /* transition for the dms icon */
+    --border-hover-transition: 0.2s ease; /* transition for borders when hovered */
+
+    /* top bar options */
+    --top-bar-height: var(--gap); /* height of the top bar (discord default is 36px, old discord style is 24px, var(--gap) recommended if button position is set to titlebar) */
+    --top-bar-button-position: titlebar; /* off: default position, hide: hide buttons completely, serverlist: move inbox button to server list, titlebar: move inbox button to channel titlebar (will hide title) */
+    --top-bar-title-position: off; /* off: default centered position, hide: hide title completely, left: left align title (like old discord) */
+    --subtle-top-bar-title: off; /* off: default, on: hide the icon and use subtle text color (like old discord) */
+
+    /* window controls */
+    --custom-window-controls: on; /* off: default window controls, on: custom window controls */
+    --window-control-size: 14px; /* size of custom window controls */
+
+    /* dms button options */
+    --custom-dms-icon: custom; /* off: use default discord icon, hide: remove icon entirely, custom: use custom icon */
+    --dms-icon-svg-url: url('https://refact0r.github.io/midnight-discord/assets/Font_Awesome_5_solid_moon.svg'); /* icon svg url. MUST BE A SVG. */
+    --dms-icon-svg-size: 90%; /* size of the svg (css mask-size property) */
+    --dms-icon-color-before: var(--icon-subtle); /* normal icon color */
+    --dms-icon-color-after: var(--white); /* icon color when button is hovered/selected */
+    --custom-dms-background: off; /* off to disable, image to use a background image (must set url variable below), color to use a custom color/gradient */
+    --dms-background-image-url: url(''); /* url of the background image */
+    --dms-background-image-size: cover; /* size of the background image (css background-size property) */
+    --dms-background-color: linear-gradient(70deg, var(--aqua-2), var(--green-2), var(--yellow-2)); /* fixed color/gradient (css background property) */
+
+    /* background image options */
+    --background-image: off; /* off: no background image, on: enable background image (must set url variable below) */
+    --background-image-url: url(''); /* url of the background image */
+
+    /* transparency/blur options */
+    /* NOTE: TO USE TRANSPARENCY/BLUR, YOU MUST HAVE TRANSPARENT BG COLORS. FOR EXAMPLE: --bg-4: hsla(220, 15%, 10%, 0.7); */
+    --transparency-tweaks: off; /* off: no changes, on: remove some elements for better transparency */
+    --remove-bg-layer: off; /* off: no changes, on: remove the base --bg-3 layer for use with window transparency (WILL OVERRIDE BACKGROUND IMAGE) */
+    --panel-blur: off; /* off: no changes, on: blur the background of panels */
+    --blur-amount: 12px; /* amount of blur */
+    --bg-floating: var(--bg-3); /* set this to a more opaque color if floating panels look too transparent. only applies if panel blur is on  */
+
+    /* chatbar options */
+    --custom-chatbar: off; /* off: default chatbar, separated: chatbar separated from chat */
+    --chatbar-height: 47px; /* height of the chatbar (56px by default, 47px to align with user panel, 56px recommended for separated) */
+
+    /* other options */
+    --small-user-panel: on; /* off: default user panel, on: smaller user panel like in old discord */
+}
+
+/* color options - Nord Light Theme */
+:root {
+    --colors: on; /* off: discord default colors, on: midnight custom colors */
+
+    /* ========== TEXT & ICONS ========== */
+    /* Full Nord palette available at https://www.nordtheme.com/ */
+    --text-0: var(--bg-3);                    /* text on colored elements (uses background color) */
+    --text-1: #2E3440;                        /* darkest text (Polar Night, nord0) */
+    --text-2: #3B4252;                        /* headings and important text (Polar Night, nord1) */
+    --text-3: #434C5E;                        /* normal text (Polar Night, nord2) */
+    --text-4: #4C566A;                        /* icon buttons and channels (Polar Night, nord3) */
+    --text-5: #4c566a;                        /* muted channels/chats and timestamps (Snow Storm, nord4) */
+
+    /* ========== BACKGROUNDS & LAYERS ========== */
+    --bg-1: #D8DEE9;                          /* dark buttons when clicked (Snow Storm nord4) */
+    --bg-2: #E5E9F0;                          /* dark buttons (Snow Storm nord5) */
+    --bg-3: #ECEFF4;                          /* spacing, secondary elements (Snow Storm nord6) */
+    --bg-4: #F8F8FA;                          /* main background color (very light frost) */
+    --hover: hsla(210, 15%, 50%, 0.1);        /* channels and buttons when hovered */
+    --active: hsla(210, 15%, 45%, 0.15);      /* channels and buttons when clicked or selected */
+    --active-2: hsla(210, 15%, 40%, 0.2);     /* extra state for transparent buttons */
+    --message-hover: hsla(200, 20%, 55%, 0.08); /* messages when hovered */
+
+    /* ========== ACCENT COLORS (Frost Aurora) ========== */
+    --accent-1: #81A1C1;                      /* links and other accent text (Frost nord9) */
+    --accent-2: #A3BE8C;                      /* small accent elements (Aurora nord14) */
+    --accent-3: #8FBCBB;                      /* accent buttons (Frost nord8) */
+    --accent-4: #88C0D0;                      /* accent buttons when hovered (Frost nord7) */
+    --accent-5: #5E81AC;                      /* accent buttons when clicked (Frost nord10) */
+    --accent-new: #D08770;                    /* orange for new/destructive actions (Aurora nord12) */
+    --mention: linear-gradient(to right, color-mix(in hsl, #EBCB8B, transparent 85%) 40%, transparent); /* background of messages that mention you */
+    --mention-hover: linear-gradient(to right, color-mix(in hsl, #EBCB8B, transparent 90%) 40%, transparent); /* background of messages that mention you when hovered */
+    --reply: linear-gradient(to right, color-mix(in hsl, #434C5E, transparent 85%) 40%, transparent); /* background of messages that reply to you */
+    --reply-hover: linear-gradient(to right, color-mix(in hsl, #434C5E, transparent 90%) 40%, transparent); /* background of messages that reply to you when hovered */
+
+    /* ========== STATUS INDICATORS ========== */
+    --online: #A3BE8C;                        /* online status (Aurora nord14) */
+    --dnd: #BF616A;                           /* do not disturb (Aurora nord11) */
+    --idle: #EBCB8B;                          /* idle/away (Aurora nord13) */
+    --streaming: #B48EAD;                     /* streaming (Aurora nord15) */
+    --offline: #D8DEE9;                       /* offline status (Snow Storm nord4) */
+
+    /* ========== BORDER COLORS ========== */
+    --border-light: hsla(210, 15%, 70%, 0.15); /* general light border color */
+    --border: hsla(210, 15%, 60%, 0.2);        /* general normal border color */
+    --border-hover: hsla(210, 15%, 55%, 0.3);  /* border color of panels when hovered */
+    --button-border: hsla(210, 15%, 50%, 0.1); /* neutral border color of buttons */
+
+    /* ========== NORD BASE COLORS (HSL references) ========== */
+    /* Snow Storm */
+    --nord4: #D8DEE9;
+    --nord5: #E5E9F0;
+    --nord6: #ECEFF4;
+    /* Polar Night */
+    --nord0: #2E3440;
+    --nord1: #3B4252;
+    --nord2: #434C5E;
+    --nord3: #4C566A;
+    /* Frost */
+    --nord8: #8FBCBB;
+    --nord7: #88C0D0;
+    --nord9: #81A1C1;
+    --nord10: #5E81AC;
+    /* Aurora */
+    --nord11: #BF616A;
+    --nord12: #D08770;
+    --nord13: #EBCB8B;
+    --nord14: #A3BE8C;
+    --nord15: #B48EAD;
+
+    /* Preserve original named variables for backward compatibility */
+    --red-1: var(--nord11);
+    --red-2: var(--nord11);
+    --red-3: var(--nord11);
+    --red-4: var(--nord11);
+    --red-5: var(--nord11);
+
+    --green-1: var(--nord14);
+    --green-2: var(--nord14);
+    --green-3: var(--nord14);
+    --green-4: var(--nord14);
+    --green-5: var(--nord14);
+
+    --blue-1: var(--nord7);
+    --blue-2: var(--nord9);
+    --blue-3: var(--nord8);
+    --blue-4: var(--nord10);
+    --blue-5: var(--nord9);
+
+    --yellow-1: var(--nord13);
+    --yellow-2: var(--nord13);
+    --yellow-3: var(--nord13);
+    --yellow-4: var(--nord13);
+    --yellow-5: var(--nord13);
+
+    --purple-1: var(--nord15);
+    --purple-2: var(--nord15);
+    --purple-3: var(--nord15);
+    --purple-4: var(--nord15);
+    --purple-5: var(--nord15);
+
+    --aqua-1: var(--nord8);
+    --aqua-2: var(--nord8);
+    --aqua-3: var(--nord8);
+    --aqua-4: var(--nord8);
+    --aqua-5: var(--nord8);
+
+    --orange-1: var(--nord12);
+    --orange-2: var(--nord12);
+    --orange-3: var(--nord12);
+    --orange-4: var(--nord12);
+    --orange-5: var(--nord12);
+}

@@ -1,0 +1,1 @@
+sleep 2 && bash ~/.config/mango/script/shot.sh --full
