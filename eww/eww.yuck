@@ -12,6 +12,7 @@
               (menu)
               (workspaces)
          )
+
          (box :halign "center"
               :valign "center"
               :spacing 10
@@ -83,7 +84,7 @@
 
              ;; porcentaje
              (label :class "bsht"
-                    :text "${get_vol}%")
+                    :text "")
 
              ;; slider hover
              (revealer
@@ -306,7 +307,7 @@
 (defwidget menu []
     (button-module :class "menu"
                    :subclass "menu-eventbox"
-                   :icon " "
+                   :icon " "
                    :cmd "/home/dafne/.config/rofi/launchers/type-7/launcher.sh"
     )
 )
@@ -315,7 +316,7 @@
     (button-module :class "communism"
                    :subclass "communism-eventbox"
                    :icon "󱢇 "
-		   :cmd "echo hi comader"
+		   :cmd "~/.config/mango/script/toggle_dark_light_mode.sh"
     )
 )
 ;; ==================================================
@@ -335,13 +336,71 @@
 ;; ==================================================
 ;;                WORKSPACES (dinámicos)
 ;; ==================================================
+
+;; Variables para estados (0=libre, 1=ocupado, 2=activo)
+(defvar ws1-state 2)
+(defvar ws2-state 0)
+(defvar ws3-state 0)
+(defvar ws4-state 0)
+(defvar ws5-state 0)
+(defvar ws6-state 0)
+(defvar ws7-state 0)
+(defvar ws8-state 0)
+(defvar ws9-state 0)
+
+;; Poll para actualizar los estados (ejecuta el script)
+(defpoll workspace_state :interval "0.01s" "./scripts/workspace.sh")
+
+;; Widget workspaces
 (defwidget workspaces []
-    (literal :content workspaces-output)
+  (box :class "ws" :halign "end" :orientation "h" :spacing 5 :space-evenly false
+    ;; Workspace 1
+    (eventbox :onclick "mmsg dispatch view,1,0" :cursor "pointer"
+      :class "${ ws1-state == 2 ? 'visiting' : (ws1-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws1-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 2
+    (eventbox :onclick "mmsg dispatch view,2,0" :cursor "pointer"
+      :class "${ ws2-state == 2 ? 'visiting' : (ws2-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws2-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 3
+    (eventbox :onclick "mmsg dispatch view,3,0" :cursor "pointer"
+      :class "${ ws3-state == 2 ? 'visiting' : (ws3-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws3-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 4
+    (eventbox :onclick "mmsg dispatch view,4,0" :cursor "pointer"
+      :class "${ ws4-state == 2 ? 'visiting' : (ws4-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws4-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 5
+    (eventbox :onclick "mmsg dispatch view,5,0" :cursor "pointer"
+      :class "${ ws5-state == 2 ? 'visiting' : (ws5-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws5-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 6
+    (eventbox :onclick "mmsg dispatch view,6,0" :cursor "pointer"
+      :class "${ ws6-state == 2 ? 'visiting' : (ws6-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws6-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 7
+    (eventbox :onclick "mmsg dispatch view,7,0" :cursor "pointer"
+      :class "${ ws7-state == 2 ? 'visiting' : (ws7-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws7-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 8
+    (eventbox :onclick "mmsg dispatch view,8,0" :cursor "pointer"
+      :class "${ ws8-state == 2 ? 'visiting' : (ws8-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws8-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+    ;; Workspace 9
+    (eventbox :onclick "mmsg dispatch view,9,0" :cursor "pointer"
+      :class "${ ws9-state == 2 ? 'visiting' : (ws9-state == 1 ? 'occupied' : 'free') }"
+      (box :halign "center" :valign "center"
+           (label :text "${ ws9-state == 2 ? '‎‎ ‎ ‎  ' : '‎  ' }")))
+  )
 )
-
-;; Valor inicial (será sobrescrito por el script)
-(defvar workspaces-output "(box :class \"ws\" :halign \"end\" :orientation \"h\" :spacing 5 :space-evenly \"false\" (eventbox :onclick \"mmsg -t 1\" :cursor \"pointer\" :class \"visiting\" (label :text \" \")) (eventbox :onclick \"mmsg -t 2\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 3\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 4\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 5\" :cursor \"pointer\" :class \"free\" (label :text \" \")) (eventbox :onclick \"mmsg -t 6\" :cursor \"pointer\" :class \"free\" (label :text \" \")) )")
-
 ;; ==================================================
 ;;                DIVISOR
 ;; ==================================================
@@ -440,7 +499,7 @@
          :halign "end"
               (revealer :transition "slideleft"
                         :reveal ctlrev
-                        :duration "350ms"
+                        :duration "600ms"
                         (usrctl-widget :uptime get_uptime)
               )
     )
@@ -468,6 +527,9 @@
     )
 )
 
+;; ----- AÑADIDO: variable para brillo -----
+(defpoll brightness_val :interval "1s" "./scripts/get-brightness.sh")
+
 (defwidget usrctl-widget [uptime]
     (box :space-evenly false
          :valign "start"
@@ -491,7 +553,7 @@
                              :space-evenly false
                              (box :class "username"
                                   :space-evenly false
-                                  (label :text "Dafne")
+                                  (label :text "Dafnecita :3")
                              )
                              (box :class "uptime"
                                   :space-evenly false
@@ -500,7 +562,7 @@
                              (box :class "ctlpanel"
                                   (eventbox :cursor "pointer"
                                             :class "shutdown"
-                                            :onclick "doas /sbin/openrc-shutdown -p now"
+                                            :onclick "doas /usr/bin/openrc-shutdown -p now"
                                             :tooltip " Shutdown "
                                             (label :text "⏻")
                                   )
@@ -518,7 +580,7 @@
                                   )
                                   (eventbox :cursor "pointer"
                                             :class "reboot"
-                                            :onclick "doas /sbin/openrc-shutdown -r now"
+                                            :onclick "doas /usr/bin/openrc-shutdown -r now"
                                             :tooltip " Reboot "
                                             (label :text "\\uf021")
                                   )
@@ -556,6 +618,19 @@
                                          :min 0
                                          :round-digits 0
                                          :onchange "pamixer --set-volume {}"
+                                  )
+                             )
+                             ;; ----- NUEVO SLIDER DE BRILLO -----
+                             (box :class "brightness-slider"
+                                  :space-evenly false
+                                  :halign "center"
+                                  (label :text "󰃠")
+                                  (scale :class "vol"
+                                         :value brightness_val
+                                         :max 100
+                                         :min 0
+                                         :round-digits 0
+                                         :onchange "brightnessctl set {}%"
                                   )
                              )
                         )
@@ -652,18 +727,18 @@
      :halign "center"
      :spacing 8
      :margin-bottom 20
-     (action-button :title "󰕫" :subtitle "Scroll" :cmd "mmsg -d setlayout,scroller")
-     (action-button :title "󰕴" :subtitle "Dwindle" :cmd "mmsg -d setlayout,dwindle")
-     (action-button :title "󰕬" :subtitle "Center Tile" :cmd "mmsg -d setlayout,center_tile")
+     (action-button :title "󰕫" :subtitle "Scroll" :cmd "mmsg dispatch setlayout,scroller")
+     (action-button :title "󰕴" :subtitle "Dwindle" :cmd "mmsg dispatch setlayout,dwindle")
+     (action-button :title "󰕬" :subtitle "Center Tile" :cmd "mmsg dispatch setlayout,center_tile")
 )
 ;; Segunda fila (3 botones)
 (box :orientation "h"
      :halign "center"
      :spacing 8
      :margin-top 20
-     (action-button :title "󰕯" :subtitle "V Scroller" :cmd "mmsg -d setlayout,vertical_scroller")
-     (action-button :title "󰙀" :subtitle "Tile" :cmd "mmsg -d setlayout,tile")
-     (action-button :title "󰕰" :subtitle "Grid" :cmd "mmsg -d setlayout,grid")
+     (action-button :title "󰕯" :subtitle "V Scroller" :cmd "mmsg dispatch setlayout,vertical_scroller")
+     (action-button :title "󰙀" :subtitle "Tile" :cmd "mmsg dispatch setlayout,tile")
+     (action-button :title "󰕰" :subtitle "Grid" :cmd "mmsg dispatch setlayout,grid")
 )
               )
 	(music-player)
@@ -799,18 +874,12 @@
 (defwidget visualizer []
   (box :class "cava-container" :orientation "vertical"
     (label :class "cava-bars" :text cava_output)
-        (box :class "controls" :orientation "h"
-        (button :class "previous-button" :onclick "playerctl previous" "󰒮")
-        (eventbox :onclick "playerctl play-pause" :class "pause-play-button"
-          (label :class "song-title" :text song_title :limit-width 25))
-        (button :class "next-button" :onclick "playerctl next" "󰒭")
-      )
   )
 )
 (defwindow visualizer_window
   :monitor 0
-  :geometry (geometry :x "35%"
-                      :y "84%"
+  :geometry (geometry :x "-5px"
+                      :y "90%"
                       :width "400px"  ;; Adjust based on how many bars you set in CAVA
                       :height "20px"
                       )
@@ -845,7 +914,7 @@
 
 (defwindow clock
   :monitor 0
-  :geometry (geometry :x "0%" :y "40%" :width "1400px" :height "900px")
+  :geometry (geometry :x "0%" :y "46%" :width "1400px" :height "900px")
   :stacking "bg"
   :windowtype "desktop"
   :wm-ignore false
@@ -856,7 +925,7 @@
 ;; ==================================================
 
 (defpoll time :interval "1s" "date '+%I:%M %p'")
-(defpoll day  :interval "1h" "date '+%A' | tr '[:lower:]' '[:upper:]'")
+(defpoll day  :interval "1h" "date '+%A' | sed 's/lunes/MONDAY/;s/martes/TUESDAY/;s/miércoles/WEDNESDAY/;s/jueves/THURSDAY/;s/viernes/FRIDAY/;s/sábado/SATURDAY/;s/domingo/SUNDAY/' | tr '[:lower:]' '[:upper:]'")
 (defpoll date :interval "1h" "date '+%d %B, %Y.' | tr '[:lower:]' '[:upper:]'")
 
 
@@ -1052,3 +1121,17 @@
         "Cancel"))
   )
 )
+
+(defwidget activate-linux []
+  (box
+    :orientation "v"
+    :halign "start"
+    :valign "start"
+    (label :xalign 0 :class "label-activate" :markup "<span font_size=\"large\">Activate Linux</span>")
+    (label :xalign 0 :class "label-activate" :text "Go to Settings to activate Linux")))
+
+(defwindow activate-linux
+  :monitor 0
+  :stacking "fg"
+  :geometry (geometry :x "32px" :y "42px" :width "250px" :anchor "bottom right")
+  (activate-linux))
