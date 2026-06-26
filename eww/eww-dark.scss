@@ -24,7 +24,7 @@
 .menu-eventbox {
   color: #81a1c1;
   transition: color 0.3s;
-  font-size: 14px;
+  font-size: 16px;
 }
 .menu-eventbox:hover {
   color: #d8dee9;                     /* light fg */
@@ -572,6 +572,21 @@ tooltip {
   border-radius: 10px;
 }
 
+.bright trough {
+  all: unset;
+  background-color: #434c5e;
+  border-radius: 50px;
+  min-height: 8px;
+  min-width: 200px;
+  margin: 0 8px;
+}
+.bright trough highlight {
+  all: unset;
+  background-color: #ebcb8b;
+  border-radius: 10px;
+}
+
+
 .volume-slider,
 .volume-short {
   color: #81a1c1;
@@ -689,16 +704,18 @@ tooltip {
   border-radius: 20px;
   font-size: 11px;
   margin: 3px 0px;
-  padding-left: 16px;
-  padding-right: 14px;
+  padding-left: 20px;
+  padding-right: 6px;
   color: #81a1c1;
 }
+
 
 /* slider */
 
 .vol-slider-bar {
   min-width: 72px;
-  margin-left: 2px;
+  margin-left: 0px;
+  margin-right: 8px;
 }
 
 /* barra */
@@ -730,7 +747,7 @@ window, .cava-container, .controls, button {
 .cava-bars {
   /* JetBrains Mono or Fira Code are best for this */
   font-family: "JetBrainsMono Nerd Font", "monospace";
-  font-size: 30px;
+  font-size: 40px;
   letter-spacing: 2px;
   color: #d8dee9;
 }
@@ -811,4 +828,35 @@ window, .clock-box {
 .action-subtitle {
     font-size: 11px;
     color: #d8dee9;
+}
+
+.free, .occupied, .visiting {
+    min-width: 24px;
+    min-height: 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s ease,
+                opacity 0.3s ease,
+                color 0.3s ease;
+}
+
+.free {
+    background-color: #4c566a;
+    color: #4c566a;        /* texto claro para contraste */
+    opacity: 0.5;
+}
+.free:hover {
+    opacity: 1;
+}
+
+.occupied {
+    background-color: #81a1c1;
+    color: #81a1c1;        
+    opacity: 1;
+}
+
+.visiting {
+    background-color: #8fbcbb;
+    color: #8fbcbb;        
+    opacity: 1;
 }
